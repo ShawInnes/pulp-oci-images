@@ -1,0 +1,9 @@
+# Keep the currently running core and built-in plugins unchanged.
+FROM pulp/pulp-minimal@sha256:b9d0ecb2f259e633f774bfae27184efc6ee1f5be5889f4ef131f58701126e6a5
+USER root
+ARG NUGET_REF=4997894367095817417cc639fb3e7ce3d420238a
+RUN pip freeze > /tmp/pulp-constraints.txt && \
+    uv pip install --system --constraint /tmp/pulp-constraints.txt \
+      "pulp-nuget @ https://github.com/PhillipDiCarlo/pulp_nuget/archive/${NUGET_REF}.tar.gz" && \
+    pip check && \
+    rm -f /tmp/pulp-constraints.txt

@@ -1,0 +1,31 @@
+# Opt-in build from a local pulp_nuget checkout, including uncommitted edits.
+# docker compose -f compose.yml -f compose.local-nuget.yml build pulp_api
+x-pulp-local: &pulp-local
+  image: local/pulp-minimal-nuget:local
+  build:
+    context: .
+    dockerfile: Containerfile.nuget-local
+    additional_contexts:
+      nuget-source: ${NUGET_SOURCE:-../../../pulp-nuget}
+
+services:
+  rustfs_volume_service:
+    <<: *pulp-local
+  object_storage_service:
+    <<: *pulp-local
+  storage_migration_service:
+    <<: *pulp-local
+  container_auth_key_service:
+    <<: *pulp-local
+  migration_service:
+    <<: *pulp-local
+  signing_key_service:
+    <<: *pulp-local
+  set_init_password_service:
+    <<: *pulp-local
+  pulp_api:
+    <<: *pulp-local
+  pulp_content:
+    <<: *pulp-local
+  pulp_worker:
+    <<: *pulp-local

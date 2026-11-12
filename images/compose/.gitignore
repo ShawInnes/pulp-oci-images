@@ -1,0 +1,6 @@
+.env
+__pycache__/
+assets/certs/token_*_key.pem
+assets/certs/token_*_key.pem.*
+assets/certs/.container-auth.lock
+backups/

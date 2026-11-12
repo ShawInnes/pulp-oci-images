@@ -1,0 +1,8 @@
+# Build local plugin edits against exactly the same core image as the pinned build.
+FROM pulp/pulp-minimal@sha256:b9d0ecb2f259e633f774bfae27184efc6ee1f5be5889f4ef131f58701126e6a5
+USER root
+COPY --from=nuget-source . /tmp/pulp-nuget
+RUN pip freeze > /tmp/pulp-constraints.txt && \
+    uv pip install --system --constraint /tmp/pulp-constraints.txt /tmp/pulp-nuget && \
+    pip check && \
+    rm -rf /tmp/pulp-nuget /tmp/pulp-constraints.txt
